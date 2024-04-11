@@ -1,0 +1,33 @@
+version: '3'
+services:
+  
+  backend:
+    build:
+      context: .
+    ports:
+      - "5000:5000"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DB: KYC
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: KYC
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - ./message.sql:/docker-entrypoint-initdb.d/message.sql # Mount sql script into container's /docker-entrypoint-initdb.d directory to get table automatically created
+      - persist-data:/var/lib/mysql  # Mount the volume for MySQL data storage
+      
+
+volumes:
+  persist-data:
+  
